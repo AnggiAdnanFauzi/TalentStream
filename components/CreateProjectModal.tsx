@@ -19,7 +19,8 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
   const [selectedReqs, setSelectedReqs] = useState<string[]>([]);
   const [error, setError] = useState('');
 
-  const approvedRequisitions = requisitions.filter(r => r.status === 'Approved' && !r.jobId);
+  // Tampilkan semua requisition Approved (termasuk yang sudah punya job) agar bisa digunakan untuk proyek baru
+  const approvedRequisitions = requisitions.filter(r => r.status === 'Approved');
   
   useEffect(() => {
     if (!isOpen) {
@@ -37,10 +38,10 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !ownerId || selectedReqs.length === 0) {
+    if (!name.trim() || !ownerId) {
         setError(isId 
-          ? "Mohon masukkan nama proyek, pilih penanggung jawab, dan pilih minimal satu permintaan lowongan." 
-          : "Please provide a project name, select an owner, and choose at least one requisition.");
+          ? "Mohon masukkan nama proyek dan pilih penanggung jawab." 
+          : "Please provide a project name and select an owner.");
         return;
     }
     const projectData = {
@@ -93,7 +94,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
              </div>
              <div>
                 <label className="block mb-2 text-sm font-semibold text-slate-900 dark:text-white">
-                  {isId ? 'Pilih Permintaan Kebutuhan SDM yang Disetujui' : 'Select Approved Requisitions to Include'}
+                  {isId ? 'Pilih Permintaan Kebutuhan SDM (Opsional)' : 'Select Approved Requisitions (Optional)'}
                 </label>
                 <div className="grid grid-cols-1 gap-2 p-3 rounded-xl border border-slate-300 dark:border-slate-600 max-h-40 overflow-y-auto bg-slate-50/50 dark:bg-slate-900/30">
                     {approvedRequisitions.length > 0 ? approvedRequisitions.map(req => (
@@ -116,7 +117,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
               {isId ? 'Batal' : 'Cancel'}
             </button>
             <button type="submit" className="px-5 py-2 text-sm font-semibold text-white bg-primary-600 rounded-xl shadow-sm hover:bg-primary-700 transition-colors">
-              {isId ? 'Buat Proyek & Terbitkan Lowongan' : 'Create Project & Publish Jobs'}
+              {isId ? (selectedReqs.length > 0 ? 'Buat Proyek & Terbitkan Lowongan' : 'Buat Proyek') : (selectedReqs.length > 0 ? 'Create Project & Publish Jobs' : 'Create Project')}
             </button>
           </div>
         </form>

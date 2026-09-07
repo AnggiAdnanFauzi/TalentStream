@@ -482,52 +482,53 @@ const App: React.FC = () => {
   const [user, setUser] = useLocalStorage<User | null>('ts_session', null);
   const [showAuth, setShowAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   // Sync with Laravel Backend (Aiven MySQL)
+  // Setiap API dipanggil paralel, state diupdate SEGERA saat masing-masing selesai
   useEffect(() => {
     let isMounted = true;
-    const syncWithBackend = async () => {
-      if (!user || user.id === 'demo-user') return; // Mode Demo: murni lokal (berbeda per browser & tidak tersimpan di backend)
-      try {
-        const targetId = user.role === 'super_admin' ? 'all' : user.id;
-        const [apiJobs, apiCandidates, apiApplications, apiRequisitions, apiProjects, apiInterviews, apiTasks, currentUserRes] = await Promise.all([
-          apiGetJobs(targetId),
-          apiGetCandidates(targetId),
-          apiGetApplications(targetId),
-          apiGetRequisitions(targetId),
-          apiGetProjects(targetId),
-          apiGetInterviews(targetId),
-          apiGetTasks(targetId),
-          apiGetCurrentUser()
-        ]);
-        if (!isMounted) return;
-          if (currentUserRes && currentUserRes.success && currentUserRes.user) {
-            setUser(currentUserRes.user);
-            localStorage.setItem('ts_session', JSON.stringify(currentUserRes.user));
+    const syncWithBackend = () => {
+      if (!user || user.id === 'demo-user') return;
+
+      const targetId = user.role === 'super_admin' ? 'all' : user.id;
+
+      // Bersihkan data mock lama (companyId 'demo-user') agar tidak menumpuk
+      ['ts_projects','ts_jobs','ts_candidates','ts_applications','ts_requisitions','ts_interviews','ts_tasks'].forEach((key: string) => {
+        try {
+          const stored = localStorage.getItem(key);
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0 && parsed.every((item: any) => (item.companyId || item.company_id) === 'demo-user'))
+              localStorage.removeItem(key);
           }
-        if (apiJobs && apiJobs.length > 0) setJobs(apiJobs);
-        if (apiCandidates && apiCandidates.length > 0) setCandidates(apiCandidates);
-        if (apiApplications && apiApplications.length > 0) setApplications(apiApplications);
-        if (apiRequisitions && apiRequisitions.length > 0) setRequisitions(apiRequisitions);
-        if (apiProjects && apiProjects.length > 0) setProjects(apiProjects);
-        if (apiInterviews && apiInterviews.length > 0) setInterviews(apiInterviews);
-        if (apiTasks && apiTasks.length > 0) setTasks(apiTasks);
-      } catch (err) {
-        console.warn('Backend sync failed, running with local data:', err);
-      }
+        } catch (_) {}
+      });
+
+      // Fire semua API secara paralel - update UI segera saat masing-masing selesai
+      apiGetJobs(targetId).then(d => { if (isMounted && d !== null) setJobs(d); }).catch(() => {});
+      apiGetCandidates(targetId).then(d => { if (isMounted && d !== null) setCandidates(d); }).catch(() => {});
+      apiGetApplications(targetId).then(d => { if (isMounted && d !== null) setApplications(d); }).catch(() => {});
+      apiGetRequisitions(targetId).then(d => { if (isMounted && d !== null) setRequisitions(d); }).catch(() => {});
+      apiGetProjects(targetId).then(d => { if (isMounted && d !== null) setProjects(d); }).catch(() => {});
+      apiGetInterviews(targetId).then(d => { if (isMounted && d !== null) setInterviews(d); }).catch(() => {});
+      apiGetTasks(targetId).then(d => { if (isMounted && d !== null) setTasks(d); }).catch(() => {});
+      apiGetCurrentUser().then(res => {
+        if (isMounted && res?.success && res.user && res.user.id === user.id) {
+          setUser(res.user);
+          localStorage.setItem('ts_session', JSON.stringify(res.user));
+        }
+      }).catch(() => {});
     };
+
     syncWithBackend();
 
-    const handleRefresh = () => {
-      if (isMounted) syncWithBackend();
-    };
+    const handleRefresh = () => { if (isMounted) syncWithBackend(); };
     window.addEventListener('adminUsersRefresh', handleRefresh);
 
-    return () => { 
-      isMounted = false; 
+    return () => {
+      isMounted = false;
       window.removeEventListener('adminUsersRefresh', handleRefresh);
     };
-  }, []);
+  }, [user?.id]); // Re-sync setiap user berganti (login/logout)
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -625,6 +626,7 @@ const App: React.FC = () => {
 
   const tenantProjects = useMemo(() => {
     if (!user) return projects;
+    if (user.role === 'super_admin') return projects;
     return projects.filter(p => {
       const cId = p.companyId || (p as any).company_id;
       if (cId) return cId === currentCompanyId;
@@ -1113,4 +1115,5 @@ const App: React.FC = () => {
 };
 
 export default App;
+
 
