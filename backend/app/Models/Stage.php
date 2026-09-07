@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Stage extends Model
+{
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected $fillable = ['id', 'name', 'color', 'order'];
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class, 'stage_id', 'id');
+    }
+}
