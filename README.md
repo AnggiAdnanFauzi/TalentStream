@@ -111,38 +111,32 @@ php artisan db:seed --class=DatabaseSeeder
 
 ## 👤 Akun untuk Pengujian (Login)
 
+Gunakan kredensial berikut untuk login ke sistem. Akun-akun ini telah terdaftar di database MySQL dan dapat langsung digunakan:
+
 ### ✅ Super Admin
 Akses penuh: kelola semua klien, ubah paket langganan, arsip/pulihkan akun.
 
-| Field    | Value                                |
-|----------|--------------------------------------|
-| Email    | `superadmin@talentstream.com`        |
-| Password | `admin123` atau `password`           |
-| Role     | `super_admin`                        |
-| Paket    | Enterprise (Tidak terbatas)          |
+| Nama | Email | Password | Role | Perusahaan |
+|---|---|---|---|---|
+| Super Administrator | `superadmin@talentstream.com` | `password` | `super_admin` | TalentStream Global Platform |
 
-> *(Alias: `admin@talentstream.com` juga bisa digunakan dengan password yang sama)*
+### ✅ Client Admin (Multi-Tenant)
+Masing-masing akun klien di bawah ini memiliki data yang sepenuhnya terisolasi. Login dengan akun yang berbeda untuk melihat dashboard, lowongan, dan kandidat yang berbeda pula.
 
-> **Catatan:** Akun Super Admin dibuat **otomatis saat pertama kali login** — tidak perlu seed database terlebih dahulu.
+| Nama | Email | Password | Role | Perusahaan |
+|---|---|---|---|---|
+| Hana Kusuma | `hana.kusuma@techcorp.com` | `password` | `admin` | TechCorp Solutions |
+| Rizal Firmansyah | `rizal.firmansyah@startup.id` | `password` | `admin` | Nusantara Tech Startup |
+| Kevin Pratama | `kevin.pratama@global.io` | `password` | `admin` | Global Innovations Ltd |
+| Tiara Dewi | `tiara.dewi@fintech.co.id` | `password` | `admin` | Fintech Prima Indonesia |
 
----
-
-### ✅ Client Admin — Akun Klien
-Akun klien perusahaan **dibuat melalui halaman Register** atau langsung di database.  
-Setelah terdaftar, setiap klien hanya dapat melihat data milik perusahaannya sendiri (isolasi multi-tenant).
-
-Contoh cara membuat akun klien baru:
-1. Buka halaman Login → klik **Sign Up / Register**
-2. Isi nama, email perusahaan, nomor telepon, dan password (min. 6 karakter)
-3. Login — dashboard akan otomatis kosong dan terisolasi dari klien lain
-
-> **Tidak ada akun klien default yang di-seed.** Semua akun klien harus dibuat sendiri melalui Register atau diinput langsung ke database.
+> *Semua akun di atas menggunakan password default: `password`*
 
 ---
 
 ### 📋 Data Demo yang Di-seed (Bukan Akun Login)
 
-Seeder (`DatabaseSeeder.php`) mengisi data referensi berikut — **ini bukan akun login**, hanya data pengisi untuk keperluan demo tampilan:
+Selain akun pengguna, Seeder (`DatabaseSeeder.php`) juga mengisi data referensi untuk keperluan demo tampilan:
 
 | Tipe Data | Isi |
 |-----------|-----|
