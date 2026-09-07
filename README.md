@@ -80,7 +80,7 @@ cp .env.example .env
 php artisan key:generate
 
 # Jalankan server
-php artisan serve
+php artisan serve --port=8000
 ```
 
 ---
@@ -109,7 +109,7 @@ php artisan db:seed --class=DatabaseSeeder
 
 ---
 
-## 👤 Akun Demo untuk Pengujian
+## 👤 Akun untuk Pengujian (Login)
 
 ### ✅ Super Admin
 Akses penuh: kelola semua klien, ubah paket langganan, arsip/pulihkan akun.
@@ -121,47 +121,39 @@ Akses penuh: kelola semua klien, ubah paket langganan, arsip/pulihkan akun.
 | Role     | `super_admin`                        |
 | Paket    | Enterprise (Tidak terbatas)          |
 
-*(Alias: `admin@talentstream.com` juga bisa digunakan)*
+> *(Alias: `admin@talentstream.com` juga bisa digunakan dengan password yang sama)*
+
+> **Catatan:** Akun Super Admin dibuat **otomatis saat pertama kali login** — tidak perlu seed database terlebih dahulu.
 
 ---
 
-### ✅ Client Admin — Demo Recruiter
-Akses dashboard klien dengan data demo lengkap (lowongan, kandidat, pipeline rekrutmen).
+### ✅ Client Admin — Akun Klien
+Akun klien perusahaan **dibuat melalui halaman Register** atau langsung di database.  
+Setelah terdaftar, setiap klien hanya dapat melihat data milik perusahaannya sendiri (isolasi multi-tenant).
 
-| Field    | Value                        |
-|----------|------------------------------|
-| Email    | `demo@talentstream.com`      |
-| Password | `password`                   |
-| Role     | `admin` (Client)             |
-| Paket    | Pro                          |
-| Company  | TalentStream Demo Corp       |
+Contoh cara membuat akun klien baru:
+1. Buka halaman Login → klik **Sign Up / Register**
+2. Isi nama, email perusahaan, nomor telepon, dan password (min. 6 karakter)
+3. Login — dashboard akan otomatis kosong dan terisolasi dari klien lain
 
----
-
-### 🏢 Akun Klien Seed (Multi-Tenant Test)
-Akun-akun berikut dibuat otomatis oleh migration untuk menguji isolasi data antar tenant.  
-**Catatan:** Password akun ini **tidak di-seed** di database, sehingga tidak bisa digunakan untuk login langsung.  
-Untuk mengujinya, gunakan fitur **Register** untuk membuat akun perusahaan baru.
-
-| ID       | Nama                 | Perusahaan                  | Data Terkait                         |
-|----------|----------------------|-----------------------------|--------------------------------------|
-| user-02  | Sarah Jenkins        | TechCorp Solutions          | Lowongan: PM, UI/UX Designer         |
-| user-03  | Budi Santoso         | Nusantara Tech Startup      | Lowongan: Full-Stack Dev, CSS        |
-| user-04  | Alex Rivera          | Global Innovations Ltd      | Lowongan: Digital Marketing Mgr      |
-| user-05  | *(nama bebas)*       | Fintech Prima Indonesia     | *(Tidak ada lowongan terkait)*       |
+> **Tidak ada akun klien default yang di-seed.** Semua akun klien harus dibuat sendiri melalui Register atau diinput langsung ke database.
 
 ---
 
-### ➕ Membuat Akun Klien Baru (Tenant Baru)
-1. Buka halaman Register di aplikasi.
-2. Daftarkan akun dengan email dan perusahaan baru.
-3. Login — dashboard akan **kosong dan terisolasi** dari klien lain secara otomatis.
+### 📋 Data Demo yang Di-seed (Bukan Akun Login)
+
+Seeder (`DatabaseSeeder.php`) mengisi data referensi berikut — **ini bukan akun login**, hanya data pengisi untuk keperluan demo tampilan:
+
+| Tipe Data | Isi |
+|-----------|-----|
+| **Tahapan Rekrutmen** | Applied, Screening, Assessment, Interview, Offer, Hired |
+| **Lowongan** | Full-Stack Developer, Customer Support, UI/UX Designer, Product Manager, Digital Marketing Manager |
+| **Kandidat Demo** | Anya Forger, Loid Forger, Becky Blackbell, Maya Sari, dan lainnya (data fiktif) |
+| **Pewawancara** | Alex Greene, Brenda Smith, Charles Brown, Diana Prince, dst. |
 
 ---
 
 ## 🌐 Environment Variables
-
-Berikut variabel yang wajib dikonfigurasi (jangan commit nilai aslinya ke Git):
 
 ### Frontend (`.env.local`)
 ```env
@@ -173,7 +165,7 @@ VITE_GEMINI_API_KEY=your_gemini_api_key_here
 ```env
 APP_NAME=TalentStream
 APP_ENV=local
-APP_KEY=          # Di-generate otomatis via: php artisan key:generate
+APP_KEY=          # Di-generate otomatis: php artisan key:generate
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -209,13 +201,13 @@ CLOUDINARY_API_SECRET=
 
 ## 📦 Tech Stack
 
-| Layer     | Teknologi                                          |
-|-----------|----------------------------------------------------|
-| Frontend  | React 18, TypeScript, Tailwind CSS, Vite, Framer Motion |
-| Backend   | Laravel 11, PHP 8.2, Laravel Sanctum (Auth Token) |
-| Database  | MySQL (Aiven Cloud atau lokal)                     |
-| AI        | Google Gemini API (Sourcing, CV Parsing, Job Description) |
-| Storage   | Cloudinary (Upload CV/File)                        |
+| Layer     | Teknologi                                                       |
+|-----------|-----------------------------------------------------------------|
+| Frontend  | React 18, TypeScript, Tailwind CSS, Vite, Framer Motion         |
+| Backend   | Laravel 11, PHP 8.2, Laravel Sanctum (Auth Token)              |
+| Database  | MySQL (Aiven Cloud atau lokal)                                  |
+| AI        | Google Gemini API (Sourcing, CV Parsing, Job Description)       |
+| Storage   | Cloudinary (Upload CV/File)                                     |
 
 ---
 
