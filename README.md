@@ -115,22 +115,30 @@ Gunakan kredensial berikut untuk login ke sistem. Akun-akun ini telah terdaftar 
 
 ### ✅ Super Admin
 Akses penuh: kelola semua klien, ubah paket langganan, arsip/pulihkan akun.
-
-| Nama | Email | Password | Role | Perusahaan |
-|---|---|---|---|---|
-| Super Administrator | `superadmin@talentstream.com` | `password` | `super_admin` | TalentStream Global Platform |
+- **Nama:** Super Administrator
+- **Perusahaan:** TalentStream Global Platform
+- **Role:** `super_admin`
+- **Email:** `superadmin@talentstream.com`
+- **Password:** `password`
 
 ### ✅ Client Admin (Multi-Tenant)
-Masing-masing akun klien di bawah ini memiliki data yang sepenuhnya terisolasi. Login dengan akun yang berbeda untuk melihat dashboard, lowongan, dan kandidat yang berbeda pula.
+Masing-masing akun klien di bawah ini memiliki data yang sepenuhnya terisolasi. Login dengan akun yang berbeda untuk melihat dashboard, lowongan, dan kandidat yang berbeda pula. Semua akun ini menggunakan sandi default: **`password`**
 
-| Nama | Email | Password | Role | Perusahaan |
-|---|---|---|---|---|
-| Hana Kusuma | `hana.kusuma@techcorp.com` | `password` | `admin` | TechCorp Solutions |
-| Rizal Firmansyah | `rizal.firmansyah@startup.id` | `password` | `admin` | Nusantara Tech Startup |
-| Kevin Pratama | `kevin.pratama@global.io` | `password` | `admin` | Global Innovations Ltd |
-| Tiara Dewi | `tiara.dewi@fintech.co.id` | `password` | `admin` | Fintech Prima Indonesia |
+**1. TechCorp Solutions**
+- **Nama:** Hana Kusuma
+- **Email:** `hana.kusuma@techcorp.com`
 
-> *Semua akun di atas menggunakan password default: `password`*
+**2. Nusantara Tech Startup**
+- **Nama:** Rizal Firmansyah
+- **Email:** `rizal.firmansyah@startup.id`
+
+**3. Global Innovations Ltd**
+- **Nama:** Kevin Pratama
+- **Email:** `kevin.pratama@global.io`
+
+**4. Fintech Prima Indonesia**
+- **Nama:** Tiara Dewi
+- **Email:** `tiara.dewi@fintech.co.id`
 
 ---
 
@@ -138,12 +146,10 @@ Masing-masing akun klien di bawah ini memiliki data yang sepenuhnya terisolasi. 
 
 Selain akun pengguna, Seeder (`DatabaseSeeder.php`) juga mengisi data referensi untuk keperluan demo tampilan:
 
-| Tipe Data | Isi |
-|-----------|-----|
-| **Tahapan Rekrutmen** | Applied, Screening, Assessment, Interview, Offer, Hired |
-| **Lowongan** | Full-Stack Developer, Customer Support, UI/UX Designer, Product Manager, Digital Marketing Manager |
-| **Kandidat Demo** | Anya Forger, Loid Forger, Becky Blackbell, Maya Sari, dan lainnya (data fiktif) |
-| **Pewawancara** | Alex Greene, Brenda Smith, Charles Brown, Diana Prince, dst. |
+- **Tahapan Rekrutmen:** Applied, Screening, Assessment, Interview, Offer, Hired
+- **Lowongan:** Full-Stack Developer, Customer Support, UI/UX Designer, Product Manager, Digital Marketing Manager
+- **Kandidat Demo:** Anya Forger, Loid Forger, Becky Blackbell, Maya Sari, dan lainnya (data fiktif)
+- **Pewawancara:** Alex Greene, Brenda Smith, Charles Brown, Diana Prince, dst.
 
 ---
 
