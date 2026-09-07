@@ -173,6 +173,9 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = ({
     }
   };
 
+  const planRanks: Record<string, number> = { free: 0, pro: 1, enterprise: 2 };
+  const currentRank = planRanks[currentPlan] ?? 0;
+
   return (
     <div className="space-y-12 pb-20">
       {/* Header */}
@@ -245,7 +248,7 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = ({
             : ['Up to 3 Active Jobs', 'Up to 100 Candidates', 'Basic Analytics', 'Standard Support']}
           isCurrent={currentPlan === 'free'}
           currentLabel={isId ? 'Paket Saat Ini' : 'Current Plan'}
-          upgradeLabel={isId ? 'Pilih Paket' : 'Select Plan'}
+          upgradeLabel={isId ? (currentRank > 0 ? 'Turunkan Paket' : 'Pilih Paket') : (currentRank > 0 ? 'Downgrade' : 'Select Plan')}
           onAction={() => onUpgrade('free')}
         />
 
@@ -261,9 +264,15 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = ({
           isCurrent={currentPlan === 'pro'}
           highlighted
           currentLabel={isId ? 'Paket Saat Ini' : 'Current Plan'}
-          upgradeLabel={isId ? 'Tingkatkan Sekarang' : 'Upgrade Now'}
+          upgradeLabel={isId ? (currentRank > 1 ? 'Turunkan Paket' : 'Tingkatkan Sekarang') : (currentRank > 1 ? 'Downgrade' : 'Upgrade Now')}
           isLoading={isProcessingPlan === 'pro'}
-          onAction={() => handleCheckoutMidtrans('pro')}
+          onAction={() => {
+            if (currentRank > 1) {
+              onUpgrade('pro');
+            } else {
+              handleCheckoutMidtrans('pro');
+            }
+          }}
         />
 
         <PlanCard 
