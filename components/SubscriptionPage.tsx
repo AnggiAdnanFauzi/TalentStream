@@ -42,6 +42,7 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = ({
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoadingTx, setIsLoadingTx] = useState(false);
   const [isProcessingPlan, setIsProcessingPlan] = useState<string | null>(null);
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
 
   // Midtrans Sandbox Simulator Modal State
   const [snapModalData, setSnapModalData] = useState<{
@@ -89,7 +90,7 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = ({
     setIsProcessingPlan(plan);
 
     try {
-      const res = await apiCreateSnapToken(plan, 'monthly');
+      const res = await apiCreateSnapToken(plan, billingCycle);
       if (!res || !res.snap_token) {
         if (addToast) addToast(isId ? 'Gagal menghubungkan ke gateway Midtrans' : 'Failed to connect to Midtrans gateway', 'error');
         setIsProcessingPlan(null);
@@ -235,12 +236,34 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = ({
         </div>
       </div>
 
+            {/* Monthly / Annual Toggle Switch */}
+      <div className="flex items-center justify-center gap-3 mb-8">
+        <span className={`text-sm font-bold ${billingCycle === 'monthly' ? 'text-slate-900 dark:text-white' : 'text-slate-500'}`}>
+          {isId ? 'Bulanan' : 'Monthly'}
+        </span>
+        <button
+          type="button"
+          onClick={() => setBillingCycle(prev => prev === 'monthly' ? 'yearly' : 'monthly')}
+          className="relative inline-flex h-7 w-14 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-slate-200 dark:bg-slate-800 transition-colors duration-200 ease-in-out focus:outline-none"
+        >
+          <span
+            className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-primary-600 shadow-lg ring-0 transition duration-200 ease-in-out ${billingCycle === 'yearly' ? 'translate-x-7' : 'translate-x-0'}`}
+          />
+        </button>
+        <span className={`text-sm font-bold flex items-center gap-1.5 ${billingCycle === 'yearly' ? 'text-slate-900 dark:text-white' : 'text-slate-500'}`}>
+          {isId ? 'Tahunan' : 'Annual'}
+          <span className="px-2 py-0.5 text-xs font-black text-emerald-700 bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-400 rounded-full">
+            {isId ? 'Hemat 20%' : 'Save 20%'}
+          </span>
+        </span>
+      </div>
+
       {/* Plans Comparison */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <PlanCard 
           title="Free"
           price="Rp 0"
-          subPrice="$0 / mo"
+          subPrice={billingCycle === 'yearly' ? "$0 / yr" : "$0 / mo"}
           priceSuffix={isId ? '/bln' : '/mo'}
           description={isId ? 'Cocok untuk tim kecil yang baru mulai menjajaki rekrutmen.' : 'Perfect for small teams starting out.'}
           features={isId 
@@ -254,8 +277,8 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = ({
 
         <PlanCard 
           title="Pro"
-          price="Rp 750.000"
-          subPrice="~$49 / mo"
+          price={billingCycle === 'yearly' ? "Rp 600.000" : "Rp 750.000"}
+          subPrice={billingCycle === 'yearly' ? (isId ? "Ditagih tahunan (Rp 7.200.000/thn)" : "Billed annually ($468/yr)") : "~$49 / mo"}
           priceSuffix={isId ? '/bln' : '/mo'}
           description={isId ? 'Fitur lengkap bertenaga AI dengan kuota tak terbatas untuk tim berkembang.' : 'Complete AI-powered features for growing recruitment teams.'}
           features={isId
@@ -277,8 +300,8 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = ({
 
         <PlanCard 
           title="Enterprise"
-          price="Rp 3.500.000"
-          subPrice="~$229 / mo"
+          price={billingCycle === 'yearly' ? "Rp 2.800.000" : "Rp 3.500.000"}
+          subPrice={billingCycle === 'yearly' ? (isId ? "Ditagih tahunan (Rp 33.600.000/thn)" : "Billed annually ($2,748/yr)") : "~$229 / mo"}
           priceSuffix={isId ? '/bln' : '/mo'}
           description={isId ? 'Solusi kustom dengan kapasitas skala besar dan integrasi khusus perusahaan.' : 'Tailored enterprise solutions with dedicated account manager.'}
           features={isId
