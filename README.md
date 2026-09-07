@@ -29,17 +29,23 @@ TalentStream adalah platform rekrutmen berbasis SaaS yang dilengkapi dengan fitu
 
 ## Akun Demo untuk Pengujian (Login)
 
-Gunakan kredensial berikut untuk menguji sistem:
+Gunakan kredensial berikut untuk menguji sistem. Selain akun di bawah ini, Anda juga dapat membuat akun perusahaan (klien) baru melalui halaman **Register**.
 
 ### 1. Super Admin
-Dapat mengelola semua klien, paket langganan (Pro/Enterprise), serta melakukan arsip akun (Soft Delete).
+Dapat mengelola semua klien, paket langganan (Pro/Enterprise), serta melakukan arsip akun klien (Soft Delete).
 - **Email:** superadmin@talentstream.com
 - **Password:** dmin123 atau password
 
-### 2. Client Admin (Recruiter)
-Akses ke dashboard klien, manajamen lowongan, papan Kanban pelamar, dan integrasi AI Sourcing.
+### 2. Client Admin (Recruiter Demo)
+Akses ke dashboard perusahaan (klien), manajamen lowongan, papan Kanban pelamar, dan integrasi AI Sourcing.
 - **Email:** demo@talentstream.com
 - **Password:** password
+
+### 3. Akun Klien Lainnya (Multi-Tenant Test)
+Untuk menguji isolasi data multi-tenant secara menyeluruh, Anda dapat:
+1. Masuk ke halaman **Register**.
+2. Daftarkan akun baru (contoh: hr@startup.com dengan password password).
+3. Login dan Anda akan melihat dashboard yang sepenuhnya kosong dan terisolasi dari klien lain (Demo).
 
 ---
 *Proyek dikembangkan dengan React, TypeScript, Tailwind CSS, dan Laravel (MySQL).*
