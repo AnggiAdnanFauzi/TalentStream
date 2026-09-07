@@ -1,20 +1,45 @@
-<div align="center">
+﻿<div align="center">
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Run and deploy your AI Studio app
+# TalentStream - Multi-Tenant ATS & Recruitment Platform
 
-This contains everything you need to run your app locally.
+TalentStream adalah platform rekrutmen berbasis SaaS yang dilengkapi dengan fitur *Applicant Tracking System* (ATS), integrasi *Artificial Intelligence* (Gemini AI) untuk otomatisasi *sourcing* dan penyaringan kandidat, serta sistem multi-tenant yang aman.
 
-View your app in AI Studio: https://ai.studio/apps/6e147187-f662-4d5b-afb1-6682ae46c6c2
+## Menjalankan Aplikasi Lokal
 
-## Run Locally
+**Prasyarat:** Node.js, PHP, Composer, dan MySQL.
 
-**Prerequisites:**  Node.js
+1. **Frontend (React/Vite):**
+   `ash
+   npm install
+   npm run dev
+   `
+   *(Pastikan variabel VITE_GEMINI_API_KEY diatur di .env.local untuk mengaktifkan fitur AI)*
 
+2. **Backend (Laravel):**
+   `ash
+   cd backend
+   composer install
+   cp .env.example .env
+   php artisan key:generate
+   php artisan migrate:fresh --seed
+   php artisan serve
+   `
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Akun Demo untuk Pengujian (Login)
+
+Gunakan kredensial berikut untuk menguji sistem:
+
+### 1. Super Admin
+Dapat mengelola semua klien, paket langganan (Pro/Enterprise), serta melakukan arsip akun (Soft Delete).
+- **Email:** superadmin@talentstream.com
+- **Password:** dmin123 atau password
+
+### 2. Client Admin (Recruiter)
+Akses ke dashboard klien, manajamen lowongan, papan Kanban pelamar, dan integrasi AI Sourcing.
+- **Email:** demo@talentstream.com
+- **Password:** password
+
+---
+*Proyek dikembangkan dengan React, TypeScript, Tailwind CSS, dan Laravel (MySQL).*
